@@ -8,9 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-ecommerce-front/node_modules
-ecommerce-api/node_modules
-
 dist
 dist-ssr
 *.local
