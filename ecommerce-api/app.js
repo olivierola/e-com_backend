@@ -7,7 +7,7 @@ const { swaggerUi, swaggerDocs } = require('./config/swagger');
 const { initDatabase } = require('./config/db');
 require('dotenv').config();
 
-// Import routes
+// Import routesa
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
@@ -38,7 +38,10 @@ const apiLimiter = rateLimit({
   message: 'Too many requests, please try again later'
 });
 app.use('/api/', apiLimiter);
-
+app.use(express.json({
+  type: ['application/json', 'application/*+json', 'text/plain']
+}));
+app.use(express.urlencoded({ extended: true }));
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 

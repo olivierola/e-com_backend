@@ -7,10 +7,10 @@ const validator = require('validator');
 exports.register = async (req, res, next) => {
   try {
     const { email, password, fullName, role = 'client' } = req.body;
-    
+
     // Validate inputs
     if (!email || !password || !fullName) {
-      return res.status(400).json({ error: 'Tous les champs sont requis' });
+      return res.status(400).json({ error: 'Tous les champs sont requis ' });
     }
     
     if (!validator.isEmail(email)) {

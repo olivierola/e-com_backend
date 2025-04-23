@@ -182,7 +182,13 @@ exports.getCart = async (req, res, next) => {
     // Process items
     const processedItems = cartItems.map(item => ({
       ...item,
-      images: item.images ? JSON.parse(item.images) : [],
+      
+      images: Array.isArray(item.images)
+      ? item.images
+      : typeof item.images === 'string'
+        ? JSON.parse(item.images)
+        : [],
+
       originalPrice: item.price,
       discountedPrice: item.price * (1 - item.discount/100),
     }));

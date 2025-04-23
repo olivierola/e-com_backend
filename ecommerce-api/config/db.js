@@ -1,13 +1,13 @@
-const mysql = require("mysql2/promise");
-// const mysql = require("mysql2");
+// const mysql = require('mysql2/promise');
+const mysql   = require('mysql2/promise');
 const pool = mysql.createPool({
-  host: "127.0.0.1",
+  host: "localhost",
   user: "root",
-  password: "",
+  password: "etoundi123&K",
   database: "ecommerce",
-  // waitForConnections: true,
-  // connectionLimit: 10,
-  // queueLimit: 0
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 // Check database connection
@@ -15,7 +15,7 @@ const pool = mysql.createPool({
 const initDatabase = async () => {
   try {
     const connection = await pool.getConnection();
-
+    
     // Users table
     await connection.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -28,7 +28,7 @@ const initDatabase = async () => {
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
     `);
-
+    
     // Categories table
     await connection.query(`
       CREATE TABLE IF NOT EXISTS categories (
@@ -39,7 +39,7 @@ const initDatabase = async () => {
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
     `);
-
+    
     // Products table
     await connection.query(`
       CREATE TABLE IF NOT EXISTS products (
@@ -56,7 +56,7 @@ const initDatabase = async () => {
         FOREIGN KEY (categoryId) REFERENCES categories(id) ON DELETE SET NULL
       )
     `);
-
+    
     // Product characteristics
     await connection.query(`
       CREATE TABLE IF NOT EXISTS product_characteristics (
@@ -67,7 +67,7 @@ const initDatabase = async () => {
         FOREIGN KEY (productId) REFERENCES products(id) ON DELETE CASCADE
       )
     `);
-
+    
     // Ratings
     await connection.query(`
       CREATE TABLE IF NOT EXISTS ratings (
@@ -81,7 +81,7 @@ const initDatabase = async () => {
         UNIQUE KEY unique_rating (productId, userId)
       )
     `);
-
+    
     // Comments
     await connection.query(`
       CREATE TABLE IF NOT EXISTS comments (
@@ -94,7 +94,7 @@ const initDatabase = async () => {
         FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
       )
     `);
-
+    
     // Cart
     await connection.query(`
       CREATE TABLE IF NOT EXISTS cart_items (
@@ -109,7 +109,7 @@ const initDatabase = async () => {
         UNIQUE KEY unique_cart_item (userId, productId)
       )
     `);
-
+    
     // Orders
     await connection.query(`
       CREATE TABLE IF NOT EXISTS orders (
@@ -125,7 +125,7 @@ const initDatabase = async () => {
         FOREIGN KEY (deliveryId) REFERENCES users(id) ON DELETE SET NULL
       )
     `);
-
+    
     // Order items
     await connection.query(`
       CREATE TABLE IF NOT EXISTS order_items (
@@ -138,22 +138,18 @@ const initDatabase = async () => {
         FOREIGN KEY (productId) REFERENCES products(id) ON DELETE CASCADE
       )
     `);
-
-    console.log("Database tables initialized successfully");
+    
+    console.log('Database tables initialized successfully');
     connection.release();
+    
   } catch (error) {
-    console.error("Error initializing database:", error);
-    console.log(
-      process.env.DB_HOST,
-      process.env.DB_USER,
-      process.env.DB_PASS,
-      process.env.DB_NAME
-    );
+    console.error('Error initializing database:', error);
+    console.log(process.env.DB_HOST, process.env.DB_USER, process.env.DB_PASS, process.env.DB_NAME);
     process.exit(1);
   }
 };
 
 module.exports = {
   pool,
-  initDatabase,
+  initDatabase
 };
